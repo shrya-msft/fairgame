@@ -556,7 +556,8 @@ class Amazon:
                 elif offer_id == "aod-container":
                     # Offer Flyout or Ajax call ... count the 'aod-offer' divs that we 'see'
                     offer_count = self.driver.find_elements_by_xpath(
-                        "//div[@id='aod-pinned-offer' or @id='aod-offer']//input[@name='submit.addToCart']"
+                        "//div[@id='aod-offer']/input[@name='submit.addToCart'] | "
+                        "//div[@id='aod-pinned-offer']"
                     )
                 elif offers.get_attribute("data-action") == "show-all-offers-display":
                     # PDP Page
@@ -1784,7 +1785,7 @@ def get_shipping_costs(tree, free_shipping_string):
         if shipping_node.text:
             shipping_span_text = shipping_node.text.strip()
             if any(
-                shipping_span_text.upper() in free_message
+                free_message in shipping_span_text.upper()
                 for free_message in amazon_config["FREE_SHIPPING"]
             ):
                 # We found some version of "free" inside the span.. but this relies on a match
